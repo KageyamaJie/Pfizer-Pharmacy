@@ -232,12 +232,18 @@ public class membershipRegistration extends JPanel{
                 }  
             }
         });
+        
+       
+        IDUpdate();  
 
         southPanel.add(register);
         southPanel.add(reset);
         //add(new JLabel("Member registration form"), BorderLayout.NORTH);
         add(form, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
+        
+        //disable
+        memberID.setEnabled(false);
         
         register.addActionListener(new ActionListener() {
             @Override
@@ -295,6 +301,7 @@ public class membershipRegistration extends JPanel{
                                 
                                 mRecord.CreateRecord(memberID.getText(), name.getText(), birth, genderVariable , address.getText(), firstContact, secondContact, Integer.parseInt(urineAcid.getText()), Integer.parseInt(cholesterol.getText()), joinDate.getText(), null);
                                 JOptionPane.showMessageDialog(null, "Register Successful", "Message", JOptionPane.INFORMATION_MESSAGE); 
+                                IDUpdate();
                                 reset();
                             }    
                         }
@@ -318,6 +325,61 @@ public class membershipRegistration extends JPanel{
         //setVisible(true);
         //setDefaultCloseOperation(EXIT_ON_CLOSE);
     };
+    
+    public void IDUpdate(){
+        mem = mRecord.IDIncrement();
+        mRecord.numMember();
+        numChar = 0;
+        if(mRecord.numMember() != 0){
+            for(int i = 0 ; i < mem.getID().length(); i++){
+                checkChar = mem.getID().charAt(i);
+                if(Character.isLetter(checkChar) || checkChar == '0'){
+                    numChar++;
+                }else{
+                    break;
+                }   
+            }
+
+            membershipID = mem.getID();
+            if(numChar == 1){
+                membershipID = membershipID.replaceAll("M", "");
+                number = Integer.parseInt(membershipID) + 1;
+                incrementID = 'M' + Integer.toString(number);
+            }else if(numChar == 2){
+                membershipID = membershipID.replaceAll("M0", "");
+                number = Integer.parseInt(membershipID) + 1;
+                incrementID = "M0" + Integer.toString(number);
+                if(number == 1000){
+                    incrementID = incrementID.replaceAll("M0", "");
+                    incrementID = "M" + incrementID;
+                }
+            }else if(numChar == 3){
+                membershipID = membershipID.replaceAll("M00", "");
+                number = Integer.parseInt(membershipID) + 1;
+                incrementID = "M00" + Integer.toString(number);
+                if(number == 100){
+                    incrementID = incrementID.replaceAll("M00", "");
+                    incrementID = "M0" + incrementID;
+                }
+            }else if(numChar == 4){
+                membershipID = membershipID.replaceAll("M000", "");
+                number = Integer.parseInt(membershipID) + 1;
+                incrementID = "M000" + Integer.toString(number);
+                if(number == 10){
+                    incrementID = incrementID.replaceAll("M000", "");
+                    incrementID = "M00" + incrementID;
+                }
+            }else{
+                incrementID = "";
+                register.setEnabled(false);
+                reset.setEnabled(false);
+            }
+        }else{
+            incrementID = "M0001";
+        }
+        
+        memberID.setText(incrementID);  
+    }
     
     public void reset(){
         name.setText("");
