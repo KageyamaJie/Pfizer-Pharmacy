@@ -210,7 +210,33 @@ public class employeeRegistration extends JPanel{
         form.add(password);
         form.add(new JLabel("Confirm Password"));
         form.add(passwordRE);
-       
+        
+        contactNo.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e){
+                char input = e.getKeyChar();
+                if((input < '0' || input > '9') && input != '\b'){
+                    e.consume();
+                }  
+            }
+        });
+        
+        salary.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e){
+                char input = e.getKeyChar();
+                if((input < '0' || input > '9') && input != '\b'){
+                    e.consume();
+                }  
+            }
+        });
+        
+        bankAccount.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e){
+                char input = e.getKeyChar();
+                if((input < '0' || input > '9') && input != '\b'){
+                    e.consume();
+                }  
+            }
+        });
         
         
         IDupdate();
