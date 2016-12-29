@@ -325,7 +325,10 @@ public class editEmployee extends JPanel{
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //
+            // "if" veridate the actual length of each field
+                eID = "E" + empID.getText();
+                Employee emp = eRecord.SelectRecord(eID);
+                if(emp != null){
                     if(empName.getText().isEmpty() || address.getText().isEmpty() || contactNo.getText().isEmpty() || salary.getText().isEmpty() || bankAccount.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "Please fill up each field.", "Warning", JOptionPane.WARNING_MESSAGE);
                     }else{
@@ -375,7 +378,10 @@ public class editEmployee extends JPanel{
                         }                        
                         
                     }                    
-
+                }else{
+                    JOptionPane.showMessageDialog(null, "No Such Data.", "Warning", JOptionPane.WARNING_MESSAGE);
+                    reset();
+                }
              
             }
         });
