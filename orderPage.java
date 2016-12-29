@@ -406,7 +406,7 @@ public class orderPage extends JFrame{
                     if(normal.isSelected()){
                         String membershipID = JOptionPane.showInputDialog(null, "Please enter Customer Membership ID", "Membership ID", JOptionPane.INFORMATION_MESSAGE);
                         mem = mRecord.SelectRecord(membershipID);
-                        
+                        if(mem != null){ // problem 1 solution: check the membership ID
                             if(byCash.isSelected()){ // for member
                                 total *= 0.90;
                                 totalAfterDiscount = total;
@@ -432,7 +432,7 @@ public class orderPage extends JFrame{
                                 totalAfterDiscount = total;
                                 total = gst(total); // include tax
                                 String creditNo = JOptionPane.showInputDialog(null, "Enter customer credit card number", "Input", JOptionPane.INFORMATION_MESSAGE);
-                                
+                                if(Check(creditNo)){ // problem 2 solution: check the credit card numbering format
                                     double paid = total;
                                     if(compare(total, paid)){
                                         generateReceipt(total, paid, cashBack(total, paid));
@@ -443,12 +443,16 @@ public class orderPage extends JFrame{
                                     }else{
                                         JOptionPane.showMessageDialog(null, "Total payment Cannot more than pay.", "Notice", JOptionPane.WARNING_MESSAGE);
                                     }                                    
-
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "Invalid Credit Card Number.", "Notice", JOptionPane.WARNING_MESSAGE);                                    
+                                }
 
                             }else{
                                 JOptionPane.showMessageDialog(null, "Kindly select payment method.", "Notice", JOptionPane.WARNING_MESSAGE);
                             }                            
-
+                        }else{
+                            JOptionPane.showMessageDialog(null, "No Such Membership ID", "Notice", JOptionPane.WARNING_MESSAGE);
+                        }
                     }else if(nonmem.isSelected()){
                         if(byCash.isSelected()){ // for non-member
                             totalAfterDiscount = total;
@@ -473,7 +477,7 @@ public class orderPage extends JFrame{
                             total = gst(total); // include tax
                             String creditNo = JOptionPane.showInputDialog(null, "Enter customer credit card number", "Input", JOptionPane.INFORMATION_MESSAGE);
                             try{
-                                
+                                if(Check(creditNo)){
                                     double paid = total;
                                     if(compare(total, paid)){
                                         generateReceipt(total, paid, cashBack(total, paid));
@@ -484,7 +488,9 @@ public class orderPage extends JFrame{
                                     }else{
                                         JOptionPane.showMessageDialog(null, "Total payment Cannot more than pay.", "Notice", JOptionPane.WARNING_MESSAGE);
                                     }                                    
-                                
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "Invalid Credit Card Number.", "Notice", JOptionPane.WARNING_MESSAGE);    
+                                }
                             }catch(NumberFormatException s){
                                 JOptionPane.showMessageDialog(null, "No character is allow.");
                             }catch(Exception ex){
@@ -542,8 +548,6 @@ public class orderPage extends JFrame{
         });
 
         //----------------------------------------- END OF EAST PANEL-----------------------------------------------------------------------------------
-        
-        // southPanel settings (Display)
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         southPanel.setBorder(new TitledBorder("Staff Information"));
         southPanel.add(new JLabel("Staff ID "));
@@ -594,7 +598,6 @@ public class orderPage extends JFrame{
         int y = (int)tk.getScreenSize().getHeight();
         setVisible(true);
         setSize(x, y);
-        
     }
  
     public void IDUpdate(){
@@ -948,7 +951,25 @@ public class orderPage extends JFrame{
         }
     }
     
-    
+    public boolean Check(String ccNumber){
+        int sum = 0;
+        boolean alternate = false;
+        for (int i = ccNumber.length() - 1; i >= 0; i--)
+        {
+                int n = Integer.parseInt(ccNumber.substring(i, i + 1));
+                if (alternate)
+                {
+                        n *= 2;
+                        if (n > 9)
+                        {
+                                n = (n % 10) + 1;
+                        }
+                }
+                sum += n;
+                alternate = !alternate;
+        }
+        return (sum % 10 == 0);
+    }    
     
     public static void main(String[] args){
         new orderPage("Monitor");
