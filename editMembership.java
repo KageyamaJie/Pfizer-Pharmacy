@@ -340,6 +340,9 @@ public class editMembership extends JPanel{
         update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                mID = "M" + memberID.getText();
+                mem = mRecord.SelectRecord(mID);
+                if(mem != null){
                     if(memberName.getText().isEmpty() || contact1.getText().isEmpty() || contact2.getText().isEmpty() || address.getText().isEmpty() || urine.getText().isEmpty() || cholesterol.getText().isEmpty()){
                         JOptionPane.showMessageDialog(null, "Please fill up each field.", "Warning", JOptionPane.WARNING_MESSAGE);
                     }else{
@@ -399,6 +402,10 @@ public class editMembership extends JPanel{
                             }                     
                         }                    
                     }                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "No Such Data", "Warning", JOptionPane.WARNING_MESSAGE);
+                    reset();
+                }
             }
         });
         
